@@ -4,5 +4,5 @@
 
 ## React 2 공부 목표
 >React 기반으로 Javascript와 Node.js를 사용하여 프로젝트를 만들고,   
-Firebase를 통한 배포로 React 프로젝트 관리의 원리를 습득한다.
+Firebase를 통한 배포로 React 프로젝트 관리의 원리를 습득한다
 ***
