@@ -252,3 +252,64 @@ const Main = ()=>{
 export default Main;
 ```
 ***
+
+## Props 활용
+
+> Props는 부모 컴포넌트에서 자식 컴포넌트로 전달이 가능하다.  
+반대로 자식 컴포넌트에서 부모 컴포넌트에게 값을 전달하는건 불가능하다.
+
+* 객체의 구조분해 할당을 이용한 매개변수 프로퍼티 설정한다.
+
+* Props는 **defaultProps** 을 통해 기본값을 설정한다. (오류 방지)
+
+* Props를 전달하는 부모 컴포넌트에서의 객체 전달
+
+* Props는 자바스크립트 요소 뿐만이 아니라 HMTL 요소나 React 컴포넌트도 전달한다.   
+(자식 요소는 **children** 이라는 props로 전달이 된다.)
+
+    **Button 컴포넌트 (자식)**
+    ```js
+    const Button = ({ // 구조분해 할당 매개변수 설정
+        text,
+        color,
+        children // 부모 컴포넌트에서 전달 된 HTML요소/React 컴포넌트 props
+    })=>{
+        return(
+            <button style={{color: color}}>{text} - {color.toUpperCase()}{children}</button>
+        );
+    }
+
+    Button.defaultProps = { // color 프로퍼티의 기본값 설정
+        color: "black",
+    }
+
+    export default Button;
+    ```
+
+    **App 컴포넌트 (부모)**
+    ```js
+    const App = () => {
+
+        const buttonProps = { // 전달할 props를 객체로 묶어준다.
+            text: "메일",
+            color: "red",
+            a: 1,
+            b: 2,
+            c: 3
+        }
+         
+        return (
+            <>
+                <Button {...buttonProps} /> // 스프레드 연산자를 사용해 전달
+                <Button text={"카페"}>
+                    <Header></Header> // 자식 요소로 React 컴포넌트 전달
+                </Button>
+                <Button text={"블로그"}>
+                    <div>자식요소</div> // 자식 요소로 HTML 전달
+                </Button>
+            </>
+        )
+    }
+    export default App
+    ```
+***
