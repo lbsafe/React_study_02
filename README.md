@@ -392,3 +392,94 @@ const App = () => {
 }
 ```
 ***
+
+## 비슷한 state, 이벤트 핸들러 통합하기
+
+> 비슷한 여러개의 state가 있을 때는 하나의 객체 값으로 묶어서 하나의 state로 통합해서 관리하면 유용하다.   
+여러 개의 비슷한 이벤트 핸들러는 통합 이벤트 핸들러로 묶어줄 수 있다.
+```js
+// Before
+const Register =()=>{
+    const [name, setName] = useState("이름");
+    const [birth, setBirth] = useState("");
+    const [country, setCountry] = useState("");
+    const [bio, setBio] = useState("");
+
+    const onChangeName = (e)=>{
+        setName(e.target.value);
+    }
+
+    const onChangeBirth = (e)=>{
+        setBirth(e.target.value);
+    }
+
+    const onChangeCountry = (e)=>{
+        setCountry(e.target.value);
+    }
+
+    const onChangeBio = (e)=>{
+        setBio(e.target.value);
+    }
+
+    return(
+        <div>
+            <div><input value={name} onChange={onChangeName} placeholder={"이름"} /></div>
+            <div><input value={birth} onChange={onChangeBirth} type='date' /></div>
+            <div>
+                <select value={country} onChange={onChangeCountry}>
+                    <option value="">국적</option>
+                    <option value="KR">한국</option>
+                    <option value="US">미국</option>
+                    <option value="UK">영국</option>
+                </select>
+            </div>
+            <div>
+                <textarea value={bio} onChange={onChangeBio} style={{resize: 'none'}}/>
+            </div>
+        </div>
+    );
+}
+
+export default Register;
+```
+
+```js
+// After
+const Register =()=>{
+    const [input, setInput] = useState({ // state 객체로 통합
+        name : "이름",
+        birth : "",
+        country : "",
+        bio : ""
+    });
+
+    const onChange = (e)=>{ // 똑같은 이벤트 통합
+        console.log(e.target.name, e.target.value)
+        setInput({
+            ...input, // 스프레드 연산자로 기존 value 가져오기
+            [e.target.name]: e.target.value // 변동 될 value의 값 name 속성을 이용해서 바꿔주기
+        })
+    }
+
+    return(
+        <div>
+            <div><input name='name' value={input.name} onChange={onChange} placeholder={"이름"} /></div>
+            <div><input name='birth' value={input.birth} onChange={onChange} type='date' /></div>
+            <div>
+                <select name='country' value={input.country} onChange={onChange}>
+                    <option value="">국적</option>
+                    <option value="KR">한국</option>
+                    <option value="US">미국</option>
+                    <option value="UK">영국</option>
+                </select>
+            </div>
+            <div>
+                <textarea name='bio' value={input.bio} onChange={onChange} style={{resize: 'none'}}/>
+            </div>
+        </div>
+    );
+}
+
+export default Register;
+```
+***
