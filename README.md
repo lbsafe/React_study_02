@@ -313,3 +313,82 @@ export default Main;
     export default App
     ```
 ***
+
+## 컴포넌트의 리렌더링
+
+**리액트의 컴포넌트가 리렌더링이 발생하는 상황**
+
+1. 자신의 관리하는 state의 값이 변경 되었을 때
+
+2. 자신이 제공 받는 props의 값이 리렌더링 되었을 때
+
+3. 부모 컴포넌트가 리렌더링 되면 자식 컴포넌트도 리렌더링 된다.
+
+```js
+// Before : count 버튼을 눌러도 Bulb 컴포넌트의 console 이 찍힌다.
+const Bulb =({light})=>{
+    console.log(light);
+    return (
+        <div>{light === "ON" ? <h1 style={{backgroundColor:"orange"}}>ON</h1> : <h1 style={{backgroundColor:"gray"}}>OFF</h1>}</div>
+    );
+}
+
+const App = () => {
+    // 카운트 스테이트 값이 변동되어 부모 컴포넌트인 App 컴포넌트가 리렌더링 되면서,
+    // 관련 없는 자식 컴포넌트 Bulb에도 리렌더링이 발생한다.
+    const [count, setCount] = useState(0);
+    const [light, setLight] = useState("OFF");
+
+    return (
+        <>
+            <div>
+                <Bulb light={light}/>
+                <button onClick={()=>{setLight(light === "ON"? "OFF" : "ON")}}>{light === "ON" ? "끄기":"켜기"}</button>
+            </div>
+            <div>
+                <h1>{count}</h1>
+                <button onClick={()=>{setCount(count + 1);}}>+</button>
+            </div>
+        </>
+    )
+}
+```
+
+> :exclamation:의미 없는 컴포넌트의 리렌더링은 상황이 많아지면 성능이 안 좋아진다.  
+이런 경우를 방지하기 위해서 관련 없는 두개의 state를 서로 다른 컴포넌트로 분리해준다.
+
+```js
+// After : 서로 다른 컴포넌트의 state값이 변경 되어도 부모 컴포넌트가 리렌더링 되지 않아서 자식 컴포넌트의 불필요한 리렌더링이 발생하지 않는다.ㄴ
+const Bulb =()=>{
+    const [light, setLight] = useState("OFF");
+
+    console.log(light);
+    return (
+        <div>
+            <div>{light === "ON" ? <h1 style={{backgroundColor:"orange"}}>ON</h1> : <h1 style={{backgroundColor:"gray"}}>OFF</h1>}</div>
+            <button onClick={()=>{setLight(light === "ON"? "OFF" : "ON")}}>{light === "ON" ? "끄기":"켜기"}</button>
+        </div>
+    );
+}
+
+const Counter = ()=>{
+    const [count, setCount] = useState(0);
+
+    return(
+        <div>
+            <h1>{count}</h1>
+            <button onClick={()=>{setCount(count + 1);}}>+</button>
+        </div>
+    )
+}
+
+const App = () => {
+    return (
+        <>
+            <Bulb/>
+            <Counter />
+        </>
+    )
+}
+```
+***
