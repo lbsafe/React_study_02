@@ -483,3 +483,65 @@ const Register =()=>{
 export default Register;
 ```
 ***
+
+## React Hooks 란?
+
+>클래스 컴포넌트 기능을 함수 컴포넌트에서도 사용할 수 있게 도와주는 메서드
+
+### React Hooks 특징
+
+**:one:** React Hooks 는 이름 앞에 use 접두사가 붙는다.
+
+**:two:** React Hook 들은 함수 컴포넌트 내부에서만 호출 될 수 있다.
+
+**:three:** React Hook 은 조건부로 호출되어서는 안된다. (조건문, 반복문 내부에서 호출 불가)
+
+**:four:** use 라는 접두사를 통해 나만의 Hook 도 제작 가능하다. (Custom Hook)
+
+***
+
+## Custom Hook 만들기
+
+> 컴포넌트 내부에 반복적으로 사용하는 로직을 분리하여 작업의 효율성을 높힐 수 있다.
+
+**:one:** src/hooks 폴더 생성 및 사용할 hooks 이름 지정
+
+<p align="left"><img src="https://github.com/lbsafe/React_study_02/assets/65703793/b464d244-47fb-48b8-9d63-a11ecbe06c39" alt="hooks" width="233px"></p>
+
+
+**:two:** useInput.jsx 파일 안에 사용할 함수 작성 (접두사 use 사용 필수)
+```js
+import { useState } from "react"; // 커스텀 hook 내부에서 사용할 hook 호출
+
+const useInput=()=>{
+    const [input,setInput] = useState("");
+
+    const onChange= (e)=>{
+        setInput(e.target.value);
+    };
+
+    return [input, onChange];
+}
+
+export default useInput;
+```
+**:three:** useInput 호출 및 사용 (여러번의 반복 사용 가능)
+```js
+// 커스텀 hook을 사용하는 컴포넌트 파일 기준으로 경로에 맞춘다.
+// useState 는 커스텀 hook 내부에서 호출하여 필요하지 않다면 따로 호출하지 않는다.
+import useInput from "./../hooks/useInput.jsx";
+
+const HookExam =()=>{
+    // 기존 hook처럼 배열의 구조분해 할당으로 함수명을 자유롭게 설정
+    const [input, onChange] = useInput();
+    const [input2, onChange2] = useInput();
+
+    return(
+        <div>
+            <div><input value={input} onChange={onChange} /></div>
+            <div><input value={input2} onChange={onChange2} /></div>
+        </div>
+    )
+}
+```
+***
