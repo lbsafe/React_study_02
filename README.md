@@ -545,3 +545,53 @@ const HookExam =()=>{
 }
 ```
 ***
+
+## useEffect 로 라이프사이클 제어
+
+**:one:** 마운트 : 탄생
+```js
+// 첫 한번 실행
+useEffect(()=>{
+    console.log("마운트");
+},[]);
+```
+
+**:two:** 업데이트 : 변화, 리렌더링
+> 마운트 시점을 제외하고 컴포넌트가 업데이트 될 때만 콜백함수를 실행하고 싶다면,   
+App 컴포넌트가 마운트가 되었는지 체크하는 변수 useRef 를 이용해서 만들어준다.
+```js
+// 초기값으로 컴포넌트가 마운트 되지 않음을 뜻하는 false
+const isMount = useRef(false);
+
+useEffect(()=>{
+    if(!isMount.current){ // 컴포넌트가 마운트 되지 않은 상황
+        isMount.current = true; // 마운트 완료
+
+        return // 종료
+    }
+    // 위 조건문에서 return으로 인해 첫 마운트 시 수행되지 않음
+    console.log("업데이트");
+});
+
+```
+**:three:** 언마운트 : 죽음
+> useEffect의 콜백 함수가 반환하는 함수 => 클린업, 정리함수   
+정리함수는 useEffect가 끝날 때 (언마운트 될 때) 실행된다.
+```js
+const Even =()=>{
+    useEffect(()=>{
+        // 클린업, 정리함수
+        return () =>{
+            console.log("unmount");
+        };
+    }, []); // 빈 배열로 인해 useEffect가 마운트 될 때 실행
+
+    return <div>짝수입니다.</div>
+}
+
+<section>
+    <Viewer count = {count}/>
+    {count % 2 === 0? <Even /> : null}
+</section>
+```
+***
