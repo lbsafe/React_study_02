@@ -16,6 +16,21 @@
 
 ***
 
+## React 개발자 도구
+
+**:one:** : :link:[React 개발자 도구][reactdeveloper] 크롬 확장자 추가
+    
+[reactdeveloper]: https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=ko "Go react developer"
+
+**:two:** : 사용 설정
+- 설정 > 확장 프로그램 > 확장 프로그램 관리 > 리엑트 개발자 도구 세부정보 > 파일 URL에 대한 액세스 허용, 시크릿 모드에서 허용
+
+**:three:** : 개발자 도구 설정
+- 사용할 페이지에서 개발자 도구 Components 탭
+- Components 내부 톱니바퀴 Highlight updates when components render. 기능 사용 시 리렌더링 이 발생하는 컴포넌트를 하이라이트로 나타나준다. (불필요한 리렌더링 컴포넌트를 찾는다.)
+
+***
+
 ## :zap: Vite 란?
 
 <p align="center"><img src="https://github.com/lbsafe/React_study_02/assets/65703793/c904b0ff-228d-4c11-8bfb-dc3839be06c4" alt="vite" width="150px"></p>
