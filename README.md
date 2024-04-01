@@ -610,3 +610,75 @@ const Even =()=>{
 </section>
 ```
 ***
+
+## useReducer
+
+> useState 와 동일하게 컴포넌트 내부에 새로운 State를 생성하는 React Hook이다.   
+
+### useReducer 특징
+ 1. **:exclamation:useState와의 차이점**: 상태를 관리하는 코드를 컴포넌트 외부로 분리할 수 있다.
+ 2. 모든 useState는 useReducer로 동일하게 만들 수 있다.   
+ 3. useReducer 를 이용하여 컴포넌트 내부의 코드가 길어지는 것을 방지하고,  
+편리하게 유지보수 등의 관리를 할 수 있다.
+
+```js
+import { useReducer } from "react";
+
+// reducer : 변환기
+// -> 상태를 실제로 변환시키는 변환기 역할
+// 매개변수 reducer =(현재의 state, 요청의 내용이 담긴 액션 객체)
+const reducer =(state, action)=>{
+    console.log(state, action);
+
+    switch(action.type){ // 일반적으로 switch문을 사용한다.
+        case "INCREASE" :
+            return state + action.data;
+        
+        case "DECREASE" :
+            return state - action.data;
+
+        default: return state; // 기본 값
+    }
+
+    // if(action.type === "INCREASE"){
+    //     return state + action.data
+    // }else if(action.type === "DECREASE"){
+    //     return state - action.data;
+    // }
+}
+
+const Exam = ()=>{
+    // dispatch : 발송하다, 급송하다
+    // -> 상태 변화가 있어야 한다는 사실을 알리는, 발송하는 함수
+    // -> 상태 변화를 요청하기만 하는 함수
+
+    // useReducer(변환기 역할의 함수, 초기값);
+    const [state, dispatch] = useReducer(reducer, 0);
+    
+    const onClickPlus = ()=>{
+        // 인수: 상태가 어떻게 변화되길 원하는지
+        // -> 액션 객체
+        dispatch({
+            // 타입은 문자열로 연관성 있는 이름을 지어준다.
+            type : "INCREASE", // 더하기
+            data : 1
+        });
+    }
+
+    const onClickMinus = ()=>{
+        dispatch({
+            type : "DECREASE", // 빼기
+            data : 1
+        })
+    }
+
+    return <div>
+        <h1 style={{fontSize:"50px", marginBottom:"30px"}}>{state}</h1>
+        <button onClick={onClickPlus}>+</button>
+        <button onClick={onClickMinus}>-</button>
+    </div>
+}
+
+export default Exam;
+```
+***
