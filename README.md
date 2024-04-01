@@ -681,4 +681,96 @@ const Exam = ()=>{
 
 export default Exam;
 ```
+
+## React 최적화
+
+### useMemo
+
+> "메모이제이션(기억해두기)" 방식을 기반으로 불 필요한 연산을 다시 수행하지 않도록, 리액트 앱을 최적화 해주는 React Hook  
+:arrow_forward: 똑같은 연산을 실행할 때, 연산한 최초의 결과값을 저장했다가 필요할 때마다 다시 연산하는 것이 아닌 값만 가져오는 방식
+
+**useMemo의 기본 구조**
+* 첫번째 인자 콜백함수, 두번째 인자 배열
+* deps의 포함 된 값이 변경 되었을 때에만 콜백함수 다시 실행
+* 해당 콜백 함수가 반환하는 값을 useMemo 가 반환
+```js
+const a = useMemo(()=>{
+    // 콜백함수 / 메모이제이션 하고 싶은 연산
+    return 1;
+}, []);
+// 의존성배열 : deps
+```
+
+**기존의 방식**
+> 실제로 todos 리스트의 아무런 변화가 없어도 검색을 할때마다 호출이 일어난다.
+```js
+// Before
+const getAnalyzedData = ()=>{
+    console.log("getAnalyzedData 호출!"); // 검색 시에도 계속 호출
+    const totalCount = todos.length;
+    const checkedCount = todos.filter((todo)=>todo.isCheck).length;
+    const notCheckedCount = totalCount - checkedCount;
+
+    return {
+        totalCount,
+        checkedCount,
+        notCheckedCount
+    }
+}
+
+const {totalCount, checkedCount, notCheckedCount} = getAnalyzedData();
+
+return(
+    <section className="list_section">
+        <h2>Todo List 🌱</h2>
+        <div>
+            <div>total: {totalCount}</div>
+            <div>checked: {checkedCount}</div>
+            <div>notChecked: {notCheckedCount}</div>
+        </div>
+        <input type="text" placeholder="검색어를 입력하세요" className="search" value={search} onChange={onChangeSearch}/>
+        <ul>
+            {fillteredTodos.map((todo)=>{
+                return <TodoItem key={todo.id} {...todo} onUpdate={onUpdate} onDelete={onDelete}/>
+            })}
+        </ul>
+    </section>
+);
+```
+
+**useMemo 최적화**
+> todos 리스트의 변화가 있을 때만 호출이 일어난다.
+```js
+// After
+// 객체의 구조 분해할당을 통한 리턴으로 값을 받아 사용한다.
+const {totalCount, checkedCount, notCheckedCount} = useMemo(()=>{
+    console.log("getAnalyzedData 호출!"); // 리스트에 변화가 일어날 때만 호출
+    const totalCount = todos.length;
+    const checkedCount = todos.filter((todo)=>todo.isCheck).length;
+    const notCheckedCount = totalCount - checkedCount;
+    
+    return {
+        totalCount,
+        checkedCount,
+        notCheckedCount
+    }
+}, [todos]); // 최초 실행 후 todos의 값이 변경 될 때만 실행
+
+return(
+    <section className="list_section">
+        <h2>Todo List 🌱</h2>
+        <div>
+            <div>total: {totalCount}</div>
+            <div>checked: {checkedCount}</div>
+            <div>notChecked: {notCheckedCount}</div>
+        </div>
+        <input type="text" placeholder="검색어를 입력하세요" className="search" value={search} onChange={onChangeSearch}/>
+        <ul>
+            {fillteredTodos.map((todo)=>{
+                return <TodoItem key={todo.id} {...todo} onUpdate={onUpdate} onDelete={onDelete}/>
+            })}
+        </ul>
+    </section>
+);
+```
 ***
