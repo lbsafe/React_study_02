@@ -774,3 +774,110 @@ return(
 );
 ```
 ***
+### React.memo
+
+> 리액트의 내장 함수로 인수로는 리액트의 컴포넌트를 받는다.  
+해당 컴포넌트에 최적화 기능을 추가해서 결과값으로 반환해준다.
+
+**React.memo의 특징**
+* 최적화 기능이 추가 된 함수는 props 기준으로 메모이제이션 한다.
+* 부모 컴포넌트가 리렌더링 되더라도 자신이 받는 props 가 바뀌지 않으면 리렌더링이 발생하지 않는다.
+* 객체 타입의 값을 props 로 전달 받는 컴포넌트는 memo 함수가 기본적으로 얕은 비교를 하기에 비교 함수에 커스텀이 필요하다.
+
+**React.memo의 기본 구조**
+```js
+const MemoizedComponent = memo(Component);
+// MemoizedComponent -> 반환값 : 최적화 된 컴포넌트
+// Component -> 인수
+```
+
+**기존의 방식**
+> 부모 컴포넌트가 리렌더링이 일어나면, 전달 받는 props의 값이 변하지 않아도 자식 요소인 Header도 불필요한 리렌더링이 발생한다.
+
+```js
+import "./Header.css";
+
+const Header =()=>{
+    return(
+        <header>
+            <span>오늘은 🗓️</span>
+            <h1>{new Date().toDateString()}</h1>
+        </header>
+    );
+}
+
+export default Header;
+```
+
+**memo 최적화**
+> 부모 컴포넌트의 리렌더링이 일어나도 전달 받는 props 에 변화가 없어서 자식 요소인 Header 컴포넌트는 리렌더링이 일어나지 않는다.
+
+```js
+import { memo } from "react";
+import "./Header.css";
+
+const Header =()=>{
+    return(
+        <header>
+            <span>오늘은 🗓️</span>
+            <h1>{new Date().toDateString()}</h1>
+        </header>
+    );
+}
+
+// const memoizedHeader = memo(Header);
+
+// export default memoizedHeader;
+
+// 단축하여 사용하기
+export default memo(Header);
+```
+
+**memo 커스텀 비교 함수**
+> 객체로 props를 전달 받는 경우 얕은 비교로 인해서 올바른 비교가 불가능 하기에,  
+메모 함수 안에 두번째 인수로 콜백 함수를 추가로 전달해 최적화 기능을 커스텀 해준다.
+
+```js
+import { memo } from "react";
+
+// 객체로 받은 Props : id, isCheck, content, date
+const TodoItem = ({id, isCheck, content, date, onUpdate, onDelete})=>{
+    const onChangeCheck =()=>{
+        onUpdate(id);
+    }
+
+    const onClickDelete =()=>{
+        onDelete(id);
+    }
+    
+    return(
+        <li>
+            <input type="checkbox" checked={isCheck} onChange={onChangeCheck}/>
+            <div className="content">{content}</div>
+            <div className="date">{new Date(date).toLocaleDateString()}</div>
+            <button onClick={onClickDelete}>삭제</button>
+        </li>
+    );
+}
+
+// 고차 컴포넌트 (HOC)
+export default memo(TodoItem, (prevProps, nextProps)=>{
+    // 과거의 Props : prevProps
+    // 현재의 Props : nextProps
+    // 반환 값에 따라, Props가 바뀌었는지 안바뀌었는지 판단
+    // True -> Props 바뀌지 않음 -> 리렌더링 a
+    // False -> Props 바뀜 -> 리렌더링 O
+    if(prevProps.id !== nextProps.id) return false;
+    if(prevProps.isCheck !== nextProps.isCheck) return false;
+    if(prevProps.content !== nextProps.content) return false;
+    if(prevProps.date !== nextProps.date) return false;
+
+    return true;
+});
+```
+
+:heavy_check_mark: 고차 컴포넌트 (HOC)
+> 컴포넌트를 인수로 받아서 해당 컴포넌트의 최적화나 메모이제이션 같은 추가적인 기능을
+덧붙여,  
+새로운 컴포넌트로 반환해주는 memo와 같은 메서드
+***
