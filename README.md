@@ -661,7 +661,7 @@ const Exam = ()=>{
         dispatch({
             // 타입은 문자열로 연관성 있는 이름을 지어준다.
             type : "INCREASE", // 더하기
-            data : 1
+            data : 1 // 변화될 값
         });
     }
 
