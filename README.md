@@ -683,8 +683,14 @@ export default Exam;
 ```
 
 ## React 최적화
+**:pushpin:최적화 시점**
+> 하나의 프로젝트를 거의 완성한 시점에서 최적화를 진행한다.   
+기능 구현 -> 최적화 순으로 작업한다.
 
-### useMemo
+**:warning:최적화 주의점**
+>간단한 컴포넌트의 경우 최적화를 하는 과정에서 더 많은 연산이 필요할 수 있기에 최적화를 해주지 않는 것이 오히려 더 효율적일 수 있다. 그렇기에 무거운 연산이나, 많은 함수를 포함하는 컴포넌트만 최적화 해주는 것이 효율적이다.
+
+### 1. useMemo
 
 > "메모이제이션(기억해두기)" 방식을 기반으로 불 필요한 연산을 다시 수행하지 않도록, 리액트 앱을 최적화 해주는 React Hook  
 :arrow_forward: 똑같은 연산을 실행할 때, 연산한 최초의 결과값을 저장했다가 필요할 때마다 다시 연산하는 것이 아닌 값만 가져오는 방식
@@ -774,7 +780,8 @@ return(
 );
 ```
 ***
-### React.memo
+
+### 2. React.memo
 
 > 리액트의 내장 함수로 인수로는 리액트의 컴포넌트를 받는다.  
 해당 컴포넌트에 최적화 기능을 추가해서 결과값으로 반환해준다.
@@ -880,4 +887,41 @@ export default memo(TodoItem, (prevProps, nextProps)=>{
 > 컴포넌트를 인수로 받아서 해당 컴포넌트의 최적화나 메모이제이션 같은 추가적인 기능을
 덧붙여,  
 새로운 컴포넌트로 반환해주는 memo와 같은 메서드
+***
+
+### 3. useCallback
+
+> 불 필요한 함수 재생성 방지하기
+
+**useCallback의 기본 구조**
+```js
+const callbackFuc = useCallback(()=>{
+
+},[]);
+// 첫번째 인자 콜백함수 - 그대로 반환해서 전달해준다.
+// 두번째 인자 deps - 컴포넌트가 최초 실행 후 함수 재생성 방지
+```
+
+```js
+// Before
+const onUpdate = (targetId)=>{
+    dispatch({
+        type : "UPDATE",
+        targetId : targetId
+    });
+};
+```
+
+```js
+// After
+const onUpdate = useCallback((targetId)=>{
+    dispatch({
+        type : "UPDATE",
+        targetId : targetId
+    });
+}, []);
+
+// 기존의 메모 함수를 따로 커스텀하지 않아도 최적화 된다. (메모 함수 사용 필수)
+export default memo(TodoItem);
+```
 ***
