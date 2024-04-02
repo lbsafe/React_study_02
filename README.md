@@ -925,3 +925,34 @@ const onUpdate = useCallback((targetId)=>{
 export default memo(TodoItem);
 ```
 ***
+
+## Context
+> **Context는 데이터 보관소(객체)** 로 컴포넌트 간의 데이터를 전달하는 또 다른 방법이다.  
+Context를 사용하면 기존의 Props가 가진 단점을 해결할 수 있다.
+
+**Props 단점 - Props Drilling**
+>Props는 부모에서 자식으로만 데이터를 전달 할 수 있다. 때문에 Props를 전달할 때 하위 자식 컴포넌트의 구조가 많아질 수록 관리하기 힘들어 진다.  
+ex) Props의 이름 변경, 개발 시 타이핑 량의 증가 등
+
+* Props 방식
+    ```html
+    <부 모>
+       ↓    (Props1) 전달
+    <자식1>
+       ↓    (Props1) 전달
+    <자식2>
+       ↓    (Props1) 전달
+    <자식3>
+    ```
+
+* Context 방식
+    ```html
+    <부 모>  -(Props1)->  {Context}
+       ↓                      ↓
+    <자식1>                  
+       ↓                      ↓
+    <자식2>                  
+       ↓                      ↓ 
+    <자식3> <-(Props1)- - - - -
+    ```
+***
