@@ -927,14 +927,17 @@ export default memo(TodoItem);
 ***
 
 ## Context
+
+### Context 특징
+
 > **Context는 데이터 보관소(객체)** 로 컴포넌트 간의 데이터를 전달하는 또 다른 방법이다.  
-Context를 사용하면 기존의 Props가 가진 단점을 해결할 수 있다.
+Context 를 사용하면 기존의 Props 가 가진 단점을 해결할 수 있다.
 
 **Props 단점 - Props Drilling**
 >Props는 부모에서 자식으로만 데이터를 전달 할 수 있다. 때문에 Props를 전달할 때 하위 자식 컴포넌트의 구조가 많아질 수록 관리하기 힘들어 진다.  
 ex) Props의 이름 변경, 개발 시 타이핑 량의 증가 등
 
-* Props 방식
+* Props 방식 - Props Drilling 발생
     ```html
     <부 모>
        ↓    (Props1) 전달
@@ -955,4 +958,91 @@ ex) Props의 이름 변경, 개발 시 타이핑 량의 증가 등
        ↓                      ↓ 
     <자식3> <-(Props1)- - - - -
     ```
+
+### Context 사용법
+
+**:one:** createContext 메서드 호출
+```js
+import { createContext } from 'react';
+```
+
+**:two:** 컴포넌트 외부에 컨텍스트 생성
+ * 데이터를 하위 컴포넌트에 공급해주는 용도이기에 리렌더링 시 컨텍스트 실행 방지
+ * export 를 통해 데이터를 사용할 곳에서 불러올 수 있게 해준다.
+```js
+export const TodoContext = createContext();
+
+function App() {
+ ...
+}
+
+export default App;
+```
+
+**:three:** Context의 프로퍼티인 Provider 컴포넌트를 통해 Props를 전달 받을 컴포넌트를 감싸준다.
+
+* Provider는 Context가 공급할 데이터를 설정하거나 데이터를 공급 받을 컴포넌트를 설정한다.
+* 공급할 데이터는 Provider 컴포넌트에 value 라는 Props로 전달한다.
+
+```js
+// Before
+return (
+    <div className='app'>
+        <Header />
+        <Editor onCreate={onCreate} />
+        <List todos={todos} onUpdate={onUpdate} onDelete={onDelete} />
+    </div>
+)
+```
+```js
+// After
+return (
+    <div className='app'>
+        <Header />
+        <TodoContext.Provider value={{todos, onCreate, onUpdate, onDelete}}>
+            <Editor/>
+            <List/>
+        </TodoContext.Provider>
+    </div>
+)
+```
+
+**:four:** Context로 부터 데이터를 꺼낼 쓸 컴포넌트에 불러와 준다.
+```js
+import "./Editor.css";
+import { useRef, useReducer, useContext } from "react"; // useContext 불러온다
+import { TodoContext } from "../App"; // TodoContext를 App.jsx로 부터 불러온다.
+
+const Editor = ()=>{
+    // 인수로 데이터를 불러오고자 하는 컨텍스트 선언 후
+    // 구조분해 할당을 이용해 사용할 함수를 불러와 준다.
+    const {onCreate} = useContext(TodoContext);
+    const [content, dispatch] = useReducer(reducer, "");
+    const contentRef = useRef(null);
+
+    ... 
+
+    const onsubmit =()=>{
+        if(content === ""){
+            contentRef.current.focus();
+            return;
+        }
+        onCreate(content);
+
+        dispatch({
+            type : "clearContent",
+            data : ""
+        });
+    }
+
+    return(
+        <div className="editor">
+            <input type="text" placeholder="새로운 Todo..." value={content} onChange={onChangeContent} onKeyDown={onKeyDown} ref={contentRef}/>
+            <button onClick={onsubmit}>추가</button>
+        </div>
+    );
+}
+
+export default Editor;
+```
 ***
