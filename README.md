@@ -1045,4 +1045,147 @@ const Editor = ()=>{
 
 export default Editor;
 ```
+
+### Context 의 최적화 문제
+
+> Provider 컴포넌트도 엄연히 React의 컴포넌트이기 때문에 App 컴포넌트로 부터 전달 받는 value Props 에 제공 받는 Props가 바뀌게 되면 리렌더링이 발생하게 된다.  
+:arrow_forward: 새로운 리스트를 추가하거나 수정하거나 삭제 했을 때 todos state가 바뀌게 되면서 객체를 다시 생성해서 넘겨 주기 때문이다.
+
+```js
+function App() {
+    // todos state의 변동
+    const [todos, dispatch] = useReducer(reducer, mockData);
+
+    ...
+
+    // 부모로 부터 전달 받는 todos state가 변동 되어 value 객체 자체가 다시 생성 되면,
+    // 부모 컴포넌트인 Provider가 리렌더링이 발생하면서,
+    // 하위 컴포넌트에서 context로 받는 객체도 다시 생성 되어 리렌더링이 일어난다.
+    // 때문에 memo를 적용해도 props가 변동된 것과 동일하게 리렌더링이 발생한다.
+    return (
+        <div className='app'>
+            <Header />
+                                   value 객체의 재생성 -> Provider 리렌더링
+            <TodoContext.Provider value={{todos, onCreate, onUpdate, onDelete}}>
+                <Editor/>  -> 전달 받은 context 객체 재생성 -> 리렌더링
+                <List/>    -> 전달 받은 context 객체 재생성 -> 리렌더링
+            </TodoContext.Provider>
+        </div>
+    )
+}
+```
+
+### Context 분리하기 (최적화 문제 해결)
+
+>변경 되는 값과 변경되지 않는 값을 분리해준다.
+* todos 처럼 state 임으로 변경 될 수 있는 값
+* 변경되지 않는 함수
+```html
+                    TodoContext
+                 ↙             ↘
+    TodoStateContext           TodoDispatchContext
+   (변경 될 수 있는 값)          (변경 되지 않는 값)
+        state 등                바뀌지 않는 함수 등
+```
+
+**:one:** 용도에 따라서 분리하기
+```js
+// 분리해서 선언
+export const TodoStateContext = createContext();
+export const TodoDispatchContext = createContext();
+
+function App() {
+    const [todos, dispatch] = useReducer(reducer, mockData);
+    const idRef = useRef(3);
+
+    const onCreate = useCallback((content)=>{
+        ...
+    }, []);
+
+    const onUpdate = useCallback((targetId)=>{
+        ...
+    }, []);
+
+    const onDelete = useCallback((targetId)=>{
+        ...
+    }, []);
+
+    // App 컴포넌트에 todos state가 변경되어 리렌더링이 발생할 경우에도
+    // useMemo를 통해 최초 실행 후 객채가 재생성 되지 않도록 해준다.
+    const memoizedDistpatch = useMemo(()=>{
+        return {onCreate, onUpdate, onDelete};
+    }, []);
+
+    return (
+        <div className='app'>
+            <Header />
+            <TodoStateContext.Provider value={todos}>
+                <TodoDispatchContext.Provider value={memoizedDistpatch}>
+                    <Editor />
+                    <List />
+                </TodoDispatchContext.Provider>
+            </TodoStateContext.Provider>            
+        </div>
+    );
+}
+
+export default App;
+```
+
+**:two:** 각각의 Context 를 불러올 자식 컴포넌트들에서 호출하기
+```js
+// TodoDispatchContext
+import { memo, useContext } from "react";
+import { TodoDispatchContext } from "../App"; // TodoDispatchContext 호출
+
+const TodoItem = ({id, isCheck, content, date})=>{
+    // 객채의 구조 분해할당
+    const {onUpdate, onDelete} = useContext(TodoDispatchContext);
+
+    ...
+    
+    return(
+        <li>
+            <input type="checkbox" checked={isCheck} onChange={onChangeCheck}/>
+            <div className="content">{content}</div>
+            <div className="date">{new Date(date).toLocaleDateString()}</div>
+            <button onClick={onClickDelete}>삭제</button>
+        </li>
+    );
+}
+
+export default memo(TodoItem);
+```
+```js
+// TodoStateContext
+import { useReducer, useMemo, useContext } from "react";
+import { TodoStateContext } from "../App"; // TodoStateContext 호출
+
+const List =()=>{
+    const [search, dispatch] = useReducer(reducer, "");
+    // 객체가 아닌 state 배열이기에 구조분해 할당을 사용하지 않는다.
+    const todos = useContext(TodoStateContext);
+
+    ...
+
+    return(
+        <section className="list_section">
+            <h2>Todo List 🌱</h2>
+            <div>
+                <div>total: {totalCount}</div>
+                <div>checked: {checkedCount}</div>
+                <div>notChecked: {notCheckedCount}</div>
+            </div>
+            <input type="text" placeholder="검색어를 입력하세요" className="search" value={search} onChange={onChangeSearch}/>
+            <ul>
+                {fillteredTodos.map((todo)=>{
+                    return <TodoItem key={todo.id} {...todo} />
+                })}
+            </ul>
+        </section>
+    );
+}
+
+export default List;
+```
 ***
