@@ -268,6 +268,36 @@ export default Main;
 ```
 ***
 
+## 이미지 & 폰트 설정하기
+
+### 폰트
+* 폰트는 기본적으로 public 폴더에 보관한다.
+* index.css 에 폰트 관련 css를 적어준다.
+```css
+@font-face {
+    font-family: "NanumPenScript";
+    src: url("/NanumPenScript-Regular.ttf");
+}
+
+body *{font-family: "NanumPenScript";}
+```
+### 이미지
+* 이미지는 public, src/assets 폴더에 보관한다.
+
+* **public 폴더**
+    - 이미지의 양이 많을 때 사용 (브라우저에 캐싱하기에 메모리의 용량 과부화)
+    - URL 경로를 통해서 이미지 사용 ```<img src={"/emotion1.png"} alt="emotion1" />```
+
+* **src/assets 폴더**
+    - 소수의 이미지일 경우에만 사용
+    - 이미지를 import 해서 사용 ```<img src={emotion1} alt="emotion1" />```
+    - Vite 가 내부적으로 이미지 최적화 진행 build 시 데이터 URI(포맷) 발생
+        > 데이터 URI는 이미지와 같은 외부 데이터를 문자열 형태로 브라우저의 메모리에 캐싱(저장)하기 위해 사용되는 포맷
+<p align="center"><img src="https://github.com/lbsafe/React_study_02/assets/65703793/e76072c2-fd74-43f1-b1c3-48a534d06c6d" alt="react" width="600px">
+<img src="https://github.com/lbsafe/React_study_02/assets/65703793/d8f86076-49d2-4f59-a58a-ba2d7daf3dc7" alt="react" width="600px"></p>
+
+***
+
 ## Props 활용
 
 > Props는 부모 컴포넌트에서 자식 컴포넌트로 전달이 가능하다.  
