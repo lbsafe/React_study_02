@@ -1189,3 +1189,76 @@ const List =()=>{
 export default List;
 ```
 ***
+
+## React Router
+
+### React Router 사용 방법
+
+**:one: React Router 라이브러리 기본 설정**
+
+1. React Router 라이브러리 설치 명령어 실행
+
+    ```js
+    npm i react-router-dom
+    ```
+2. main.jsx 설정 하기
+    * BrowserRouter 컴포넌트 import 한다.
+    * ```<APP />``` 컴포넌트를 ```<BrowserRouter>``` 컴포넌트로 감싸준다.
+    * BrowserRouter는 Context 객체의 Proider 컴포넌트를 통해 App 컴포넌트와 모든 자손 컴포넌트에게 공급 된다. (개발자 도구 확인)
+    ```js
+    import React from 'react';
+    import ReactDOM from 'react-dom/client';
+    import App from './App.jsx';
+    import './index.css';
+    import { BrowserRouter } from 'react-router-dom';
+
+    ReactDOM.createRoot(document.getElementById('root')).render(
+        <BrowserRouter>
+            <App />
+        </BrowserRouter>
+    );
+    ```
+**:two: 페이지 나누기**
+
+1. Routes, Route 컴포넌트를 임폴트 해준다.
+2. src/pages 디렉토리 생성 후 페이지 역할을 할 컴포넌트를 생성해준다.
+3. ```<Routes>``` 를 최상위 태그로 ```<Route>``` 를 통해 path와 element Props를 설정해준다.
+
+    ```js
+    import './reset.css';
+    import './App.css';
+    import { Routes, Route } from 'react-router-dom';
+    import Home from './pages/Home.';
+    import Diary from './pages/Diary';
+    import New from './pages/New';
+    import Notfound from './pages/Notfound';
+
+    function App() {
+        return (
+            <Routes>
+                <Route path='/' element={<Home />} />
+                <Route path='/new' element={<New />} />
+                <Route path='/diary' element={<Diary />} />
+                <Route path='*' element={<Notfound />} />
+            </Routes>
+        )
+    }
+
+    export default App;
+    ```
+**:three: Router 라이브러리 주의 사항**
+
+1. **Routes 특징**
+    * Routes는 마치 스위치 케이스처럼 현재 브라우저에 알맞는 path Prop을 갖는 Route 컴포넌트를 찾는다.
+    * Routes 컴포넌트 안에는 Route 컴포넌트만 사용 가능하다.
+    * Routes 컴포넌트 밖에 요소는 모든 페이지에 동일하게 출력 된다.  
+    (모든 페이지에 공통으로 사용할 요소가 아니라면 Routes 외부에 배치하지 않는다.)
+
+2. **Route 특징**
+    * Route Props
+        * path : 경로
+        * element : 해당 경로에서 렌더링 하고자 하는 컴포넌트
+    * path Props
+        * path='/' : index 기본 메인 페이지
+        * path='*' : wildcard(switch case default) 위에 있는 경로에 일치하지    않았을 때의 경우, 주로 Notfound 즉 페이지를 찾지 못할 경우에 쓰인다.
+***
