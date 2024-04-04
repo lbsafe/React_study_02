@@ -1249,7 +1249,7 @@ export default List;
 **:three: Router 라이브러리 주의 사항**
 
 1. **Routes 특징**
-    * Routes는 마치 스위치 케이스처럼 현재 브라우저에 알맞는 path Prop을 갖는 Route 컴포넌트를 찾는다.
+    * Routes는 마치 switch case처럼 현재 브라우저에 알맞는 path Prop을 갖는 Route 컴포넌트를 찾는다.
     * Routes 컴포넌트 안에는 Route 컴포넌트만 사용 가능하다.
     * Routes 컴포넌트 밖에 요소는 모든 페이지에 동일하게 출력 된다.  
     (모든 페이지에 공통으로 사용할 요소가 아니라면 Routes 외부에 배치하지 않는다.)
@@ -1261,4 +1261,137 @@ export default List;
     * path Props
         * path='/' : index 기본 메인 페이지
         * path='*' : wildcard(switch case default) 위에 있는 경로에 일치하지    않았을 때의 경우, 주로 Notfound 즉 페이지를 찾지 못할 경우에 쓰인다.
+***
+
+### React Router 페이지 이동하기
+
+**:one:** Link 컴포넌트
+> 리액트 앱 내부 링크 이동할 때 사용한다. (클라이언트 사이드 렌더링 방식 제공)
+```js
+<Link to={"/"}>Home</Link>
+```
+
+**:two:** useNavigate Hook
+> 특정 조건에 따라 함수를 사용해서 링크를 이동 시켜야 하는 경우 사용한다.  
+ex) 로그인, 회원가입 등 (클라이언트 사이드 렌더링 방식)
+```js
+const nav = useNavigate(); // nav에 useNavigate 함수 저장
+
+const onClickBtn = ()=>{ // 이벤트 핸들러 함수
+    nav('/new'); // nav 함수 호출 후 인수로는 이동하고자 하는 경로 지정
+};
+```
+
+**활용 예시**
+```js
+import './reset.css';
+import './App.css';
+import { Routes, Route, Link, useNavigate } from 'react-router-dom';
+import Home from './pages/Home.';
+import Diary from './pages/Diary';
+import New from './pages/New';
+import Notfound from './pages/Notfound';
+
+function App() {
+    const nav = useNavigate();
+
+    const onClickBtn = ()=>{
+        nav('/new');
+    };
+
+    return(
+        <>
+            <div>
+                <Link to={"/"}>Home</Link>
+                <Link to={"/new"}>New</Link>
+                <Link to={"/diary"}>Diary</Link>
+            </div>
+            <button onClick={onClickBtn}>New 페이지 이동</button>
+            <Routes>
+                <Route path='/' element={<Home />} />
+                <Route path='/new' element={<New />} />
+                <Route path='/diary' element={<Diary />} />
+                <Route path='*' element={<Notfound />} />
+            </Routes>
+        </>
+    )
+}
+
+export default App;
+```
+***
+
+### React Router 동적 경로 이동하기
+
+**:question: 동적 경로란**
+> 쇼핑몰의 상품 등이 경로가 되는 동적인 데이터를 포함하고 있는 경로  
+ex) ~/product/01, ~/product/02, ~/search?q=검색어
+
+* URL 파라미터 방식
+
+    > 아이템의 id 등의 변경 되지 않는 값을 주소로 명시하기 위해 사용 
+    ```html
+    / 뒤에 아이템의 id를 명시  
+    ~/product/아이디1, ~/product/아이디2
+    ```
+* Query String 방식
+
+    > 검색어 등의 자주 변경 되는 값을 주소로 명시하기 위해 사용
+    ```html
+    ? 뒤에 변수명과 값 명시  
+    ~/search?q=검색어
+    ```
+#### 동적 경로 사용법 (URL 파라미터)
+
+**:one:** Route 경로에 URL 파라미터 사용 명시
+```js
+// 경로 뒤에 /:id 등의 값 추가 
+<Route path='/diary/:id' element={<Diary />} />
+```
+
+**:two:** URL 파라미터를 사용할 컴포넌트에서 useParams Hook 사용
+
+1. useParams 임폴트
+2. const params = useParams(); 변수에 담아서 호출
+
+```js
+import { useParams } from "react-router-dom";
+
+const Diary = ()=>{
+    const params = useParams();
+
+    console.log(params);
+    return(
+        <div>{params.id}번 일기입니다.</div>
+    );
+}
+
+export default Diary;
+```
+
+#### 동적 경로 사용법 (Query String)
+
+**:one:** Query String을 사용할 컴포넌트에서 useSearchParams Hook 사용
+
+**:two:** useState와 같이 함수 사용
+
+1. params : Query String 으로 전달한 변수와 값
+2. setParams : 특정 Query String 의 값을 변경할 수 있는 함수, 값을 수정할 수 있다.
+3. params.get("value") 통해 Query String의 값을 불러온다.
+
+```js
+import { useSearchParams } from "react-router-dom";
+
+const Home = ()=>{
+    const [params, setParams] = useSearchParams();
+
+    console.log(params.get("value"));
+
+    return(
+        <div>홈</div>
+    );
+}
+
+export default Home;
+```
 ***
