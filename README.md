@@ -1494,4 +1494,7 @@ Undefined : 권한을 설정하지 않았다.
 :link:[감정 일기장][diary] 확인하기
     
 [diary]: https://emotion-diary-fawn.vercel.app/ "Go diary"
+
+**:star: 간단 후기**
+> React 기반으로 Javascript와 Node.js를 사용하여 프로젝트를 만들고, localStorage를 이용해서 사이트에 각각의 일기 데이터를 저장하고 불러오게 만들었다. 프로젝트 완성 후에는 Vercel 을 사용해서 배포하면서 bulid 하는 방법을 배웠다.
 ***
