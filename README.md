@@ -1425,3 +1425,66 @@ const Home = ()=>{
 export default Home;
 ```
 ***
+
+
+## Vercel 배포하기
+
+**:one:** : :link:[Vercel][vercel] 홈페이지 가입하기
+    
+[vercel]: https://vercel.com/ "Go vercel"
+
+**:two:** 파일 build 하기
+```js
+npm run build
+```
+
+**:three:** vercel 설치
+```js
+npm install -g vercel
+```
+
+**:four:** vercel 로그인하기 (가입한 계정 선택)
+```js
+vercel login
+```
+
+**:five:** vercel 배포하기
+```js
+npx vercel
+```
+
+**:six:** 수정하기
+```js
+npm run build // 수정 후 다시 build
+    ↓
+vercel // 배포하기
+    ↓
+vercel --prod // 배포 확정 확인
+```
+
+### **:warning:** 커맨드 오류가 생길 경우
+
+**:one:** windows powershell을 검색하여 관리자로 실행해준다
+
+**:two:** get-ExecutionPolicy로 현재 권한상태를 확인한다
+```js
+get-ExecutionPolicy
+```
+
+**:three:** 권한 상태를 "RemoteSigned"으로 변경한다
+```js
+Set-ExecutionPolicy RemoteSigned
+```
+
+**:four:** get-ExecutionPolicy로 권한이 잘 변경되었는지 확인한다
+
+```js
+// 설정
+Restricted : default 설정 값으로, 스크립트 파일을 실행할 수 없다.
+AllSigned : 신뢰할 수 있는(서명된) 스크립트 파일만 실행할 수 있다.
+RemoteSigned : 로컬에서 본인이 생성한 스크립트와, 신뢰할 수 있는(서명된) 스크립트 파일 실행할 수 있다.
+Unrestricted : 모든 스크립트 실행가능하다.
+ByPass : 경고/차단 없이 모든 것을 실행 가능 하도록 한다.
+Undefined : 권한을 설정하지 않았다.
+```
+***
