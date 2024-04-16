@@ -1488,3 +1488,10 @@ ByPass : 경고/차단 없이 모든 것을 실행 가능 하도록 한다.
 Undefined : 권한을 설정하지 않았다.
 ```
 ***
+
+## 프로젝트 완성
+
+:link:[감정 일기장][diary] 확인하기
+    
+[diary]: https://emotion-diary-fawn.vercel.app/ "Go diary"
+***
