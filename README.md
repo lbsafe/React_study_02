@@ -1258,7 +1258,7 @@ export default List;
     import './reset.css';
     import './App.css';
     import { Routes, Route } from 'react-router-dom';
-    import Home from './pages/Home.';
+    import Home from './pages/Home';
     import Diary from './pages/Diary';
     import New from './pages/New';
     import Notfound from './pages/Notfound';
