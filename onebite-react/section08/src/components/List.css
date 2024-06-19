@@ -1,0 +1,11 @@
+.list_section{display: flex; flex-direction: column;}
+.list_section h2{font-size: 20px; margin-bottom: 30px;}
+.list_section .search{width: 100%; border: none; border-bottom: 1px solid #adb5bd; padding: 15px 0; box-sizing: border-box;}
+.list_section .search:focus{outline: 0 none; border-bottom: 1px solid #2196f3;}
+
+.list_section ul{display: flex; flex-direction: column;}
+.list_section ul li{display: flex; align-items: center; gap: 20px; padding: 20px 0; border-bottom: 1px solid #adb5bd;}
+.list_section ul li input[type="checkbox"]{width: 20px;}
+.list_section ul li .content{flex: 1;}
+.list_section ul li .date{font-size: 14px; color: #aaa;}
+.list_section ul li button{cursor: pointer; font-size: 14px; color: #aaa; border: none; border-radius: 5px; padding: 5px; box-sizing: border-box;}

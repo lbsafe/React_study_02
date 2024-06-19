@@ -1,0 +1,7 @@
+.header{display: flex; align-items: center; padding: 20px 0; border-bottom: 1px solid rgb(226, 226, 226);}
+.header > div{display: flex;}
+.header .header_center{width: 50%; font-size: 25px; justify-content: center;}
+.header .header_left,
+.header .header_right{width: 25%;}
+.header .header_left{justify-content: flex-start;}
+.header .header_right{justify-content: flex-end;}

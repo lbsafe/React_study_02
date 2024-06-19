@@ -1,0 +1,15 @@
+body{
+    padding: 20px;
+}
+.app{width: 100%; max-width: 400px; margin: 0 auto;}
+.app > section{
+    background-color: rgb(245, 245, 245);
+    border: 1px solid rgb(240, 240, 240);
+    border-radius: 5px;
+    padding: 20px;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+}
+.app > section:last-of-type{margin-bottom: 0;}
+
+.app > section button{cursor: pointer;}

@@ -1,0 +1,4 @@
+.editor{display: flex; gap: 10px; margin-bottom: 30px;}
+.editor input[type="text"]{flex: 1; padding: 15px; border: 1px solid #adb5bd; border-radius: 5px;}
+.editor input[type="text"]:focus{outline-color: #2196f3;}
+.editor button{cursor: pointer; width: 80px; border: none; background-color: #2196f3; color: #fff; border-radius: 5px;}

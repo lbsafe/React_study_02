@@ -1,0 +1,12 @@
+.diary_item{display: flex; gap: 15px; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid var(--gray-color2);}
+.diary_item .img_box{display: flex; justify-content: center; min-width: 120px; height: 80px; border-radius: 5px; cursor: pointer;}
+.diary_item .img_box img{width: 50%;}
+.diary_item .img_box_1{background-color: rgb(100, 201, 100);}
+.diary_item .img_box_2{background-color: rgb(157, 215, 114);}
+.diary_item .img_box_3{background-color: rgb(253, 206, 23);}
+.diary_item .img_box_4{background-color: rgb(253, 132, 70);}
+.diary_item .img_box_5{background-color: rgb(253, 86, 95);}
+.diary_item .info_box{flex: 1; cursor: pointer; overflow: hidden;}
+.diary_item .info_box .created_date{font-size: 25px; font-weight: 700;}
+.diary_item .info_box .content{font-size: 18px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;}
+.diary_item .btn_box{min-width: 70px;}

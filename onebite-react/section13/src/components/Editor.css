@@ -1,0 +1,16 @@
+.editor{padding: 40px 0;}
+.editor section{margin-bottom: 40px;}
+.editor section h2{font-size: 22px; margin-bottom: 20px;}
+.editor section input, textarea{background-color: var(--gray-color2); border: none; border-radius: 5px; font-size: 20px; padding: 10px 20px; box-sizing: border-box;}
+.editor label{position: relative; display: block; width: 150px;}
+.editor label:before{ content: ''; display: block; width: 20px; height: 20px; position: absolute; z-index: 2; top: 50%; right: 4px; transform: translateY(-50%); background-image: url("../assets/ico_under_arrow.png"); background-repeat: no-repeat; background-position: center; background-size: 12px; background-color: var(--gray-color2);}
+.editor input[type='date'] {position: relative; z-index: 1; width: 100%;}
+.editor input[type='date']::-webkit-calendar-picker-indicator { position: absolute;  left: 0; top: 0; width: 100%; height: 100%; background: transparent;  color: transparent;  cursor: pointer;}
+.editor input[type='date']::before {content: attr(placeholder); width: 100%;height: 100%;}
+.editor input[type='date']:valid::before{display: none;}
+
+.editor section textarea{width: 100%; min-height: 200px; padding: 20px; box-sizing: border-box; resize: none;}
+
+.editor section .emotion_list_wrap{display: flex; justify-content: center; gap: 2%;}
+
+.editor .btn_section{display: flex; justify-content: space-between; margin-bottom: 0;}

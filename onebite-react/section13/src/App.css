@@ -1,0 +1,17 @@
+:root{
+    --gray-color: rgb(246,246,246);
+    --gray-color2: rgb(236,236,236);
+    --white-color: #fff;
+    --black-color: #000;
+}
+html, body{ background-color: var(--gray-color);}
+
+#root{width: 100%; height: 100%; max-width: 600px; min-height: 100vh; background-color: var(--white-color); margin: 0 auto; -webkit-box-shadow: 0 0 29px 0 rgba(100,100,100,0.2); box-shadow: 0 0 29px 0 rgba(100,100,100,0.2); padding: 0 20px; box-sizing: border-box;}
+
+input, button, select{color: var(--black-color);}
+
+select{background-image: url("./assets/ico_under_arrow.png"); background-repeat: no-repeat; background-position: right 7px center; background-size: 12px;}
+select::-ms-expand{display: none;}
+select{-webkit-appearance: none; -moz-appearance: none; appearance: none;}
+
+input[type='date']{position: relative;}

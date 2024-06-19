@@ -1,0 +1,14 @@
+.viewer{padding: 40px 0;}
+.viewer section{display: flex; flex-direction: column; align-items: center; text-align: center; width: 100%; margin-bottom: 100px;}
+
+.viewer section h2{font-size: 22px; margin-bottom: 20px;}
+
+.viewer section .emotion_img_wrap{width: 250px; height: 250px; border-radius: 5px; display: flex; flex-direction: column; align-items: center; justify-content: space-around; font-size: 25px; color: var(--white-color);}
+.viewer section .emotion_img_wrap_1{background-color: rgb(100, 201, 100);}
+.viewer section .emotion_img_wrap_2{background-color: rgb(157, 215, 114);}
+.viewer section .emotion_img_wrap_3{background-color: rgb(253, 206, 23);}
+.viewer section .emotion_img_wrap_4{background-color: rgb(253, 132, 70);}
+.viewer section .emotion_img_wrap_5{background-color: rgb(253, 86, 95);}
+
+.viewer section .con_wrap{width: 100%; background-color: var(--gray-color2); border-radius: 5px; word-break: keep-all; overflow-wrap: break-word; padding: 20px; box-sizing: border-box;}
+.viewer section .con_wrap p{font-size: 20px; font-weight: 400; line-height: 1.6; text-align: left;}

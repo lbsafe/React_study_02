@@ -1,0 +1,9 @@
+.emotion_item{background-color: var(--gray-color2); padding: 3%; border-radius: 5px; text-align: center; cursor: pointer;}
+.emotion_item.emotionitem_on_1{color: var(--white-color); background-color: rgb(100, 201, 100);}
+.emotion_item.emotionitem_on_2{color: var(--white-color); background-color: rgb(157, 215, 114);}
+.emotion_item.emotionitem_on_3{color: var(--white-color); background-color: rgb(253, 206, 23);}
+.emotion_item.emotionitem_on_4{color: var(--white-color); background-color: rgb(253, 132, 70);}
+.emotion_item.emotionitem_on_5{color: var(--white-color); background-color: rgb(253, 86, 95);}
+
+.emotion_item .emotion_img{width: 60%; margin-bottom: 10px;}
+.emotion_item .emotion_name{word-break: keep-all;}

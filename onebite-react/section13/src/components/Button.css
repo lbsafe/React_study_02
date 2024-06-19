@@ -1,0 +1,4 @@
+.btn{background-color: var(--gray-color2); cursor: pointer; border: none; border-radius: 5px; padding: 10px 20px; font-size: 18px; white-space: nowrap;}
+
+.btn_Positive{background-color: rgb(100, 201, 100); color: var(--white-color);}
+.btn_Negative{background-color: rgb(253, 86, 95); color: var(--white-color);}
